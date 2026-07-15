@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PP's Garage & Playlist</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Mali:wght@400;600;700&family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#FFF7EC;
+    --pink:#FF7EB6;
+    --sky:#4FC3F7;
+    --sun:#FFD166;
+    --grape:#3D2B56;
+    --mint:#8AEAC5;
+    --white:#FFFFFF;
+  }
+
+  *{ box-sizing:border-box; }
+
+  body{
+    margin:0;
+    background:
+      radial-gradient(circle at 10% 10%, rgba(255,126,182,0.15), transparent 40%),
+      radial-gradient(circle at 90% 20%, rgba(79,195,247,0.18), transparent 45%),
+      radial-gradient(circle at 50% 90%, rgba(255,209,102,0.18), transparent 45%),
+      var(--cream);
+    font-family:'Prompt', sans-serif;
+    color:var(--grape);
+    overflow-x:hidden;
+  }
+
+  /* floating doodles */
+  .doodle{
+    position:fixed;
+    font-size:2rem;
+    opacity:0.25;
+    z-index:0;
+    animation:float 6s ease-in-out infinite;
+    pointer-events:none;
+  }
+  .doodle.d1{ top:8%; left:4%; animation-delay:0s; }
+  .doodle.d2{ top:20%; right:6%; animation-delay:1.2s; font-size:2.6rem; }
+  .doodle.d3{ bottom:15%; left:8%; animation-delay:2s; }
+  .doodle.d4{ bottom:8%; right:10%; animation-delay:0.6s; font-size:2.2rem; }
+  @keyframes float{
+    0%,100%{ transform:translateY(0) rotate(0deg); }
+    50%{ transform:translateY(-16px) rotate(8deg); }
+  }
+
+  .wrap{
+    position:relative;
+    z-index:1;
+    max-width:900px;
+    margin:0 auto;
+    padding:48px 20px 80px;
+  }
+
+  /* HERO / PROFILE */
+  .hero{
+    text-align:center;
+    margin-bottom:64px;
+  }
+
+  .avatar-frame{
+    width:170px;
+    height:170px;
+    margin:0 auto 20px;
+    border-radius:50%;
+    padding:8px;
+    background:conic-gradient(from 0deg, var(--pink), var(--sun), var(--sky), var(--mint), var(--pink));
+    box-shadow:0 12px 30px rgba(61,43,86,0.18);
+  }
+  .avatar-frame .inner{
+    width:100%;
+    height:100%;
+    border-radius:50%;
+    background:var(--white);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow:hidden;
+    border:4px solid var(--white);
+  }
+  .avatar-frame img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+  }
+  .avatar-frame .placeholder-txt{
+    font-size:0.75rem;
+    color:#B8A9CE;
+    text-align:center;
+    padding:0 10px;
+    line-height:1.4;
+  }
+
+  .name{
+    font-family:'Mali', cursive;
+    font-weight:700;
+    font-size:2.6rem;
+    margin:6px 0 2px;
+    color:var(--grape);
+  }
+  .nickname-badge{
+    display:inline-block;
+    background:var(--pink);
+    color:var(--white);
+    font-weight:600;
+    font-size:0.95rem;
+    padding:6px 18px;
+    border-radius:999px;
+    margin-bottom:14px;
+    box-shadow:0 6px 14px rgba(255,126,182,0.4);
+  }
+  .tagline{
+    font-size:1rem;
+    color:#6B577F;
+    max-width:480px;
+    margin:0 auto;
+  }
+
+  /* SECTION HEADERS */
+  .section-title{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    justify-content:center;
+    margin:0 0 36px;
+  }
+  .section-title h2{
+    font-family:'Mali', cursive;
+    font-weight:700;
+    font-size:2rem;
+    color:var(--grape);
+    margin:0;
+  }
+  .section-title .line{
+    flex:1;
+    max-width:80px;
+    height:4px;
+    border-radius:4px;
+    background:repeating-linear-gradient(90deg, var(--sun) 0 10px, transparent 10px 16px);
+  }
+
+  section{ margin-bottom:70px; }
+
+  /* CAR CARDS - polaroid / sticker style */
+  .car-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(240px, 1fr));
+    gap:28px;
+  }
+  .car-card{
+    background:var(--white);
+    border-radius:18px;
+    padding:14px 14px 20px;
+    box-shadow:0 10px 24px rgba(61,43,86,0.10);
+    position:relative;
+    transform:rotate(var(--tilt, -2deg));
+    transition:transform .25s ease, box-shadow .25s ease;
+  }
+  .car-card:nth-child(odd){ --tilt:-2deg; }
+  .car-card:nth-child(even){ --tilt:2deg; }
+  .car-card:hover{
+    transform:rotate(0deg) translateY(-6px);
+    box-shadow:0 18px 34px rgba(61,43,86,0.18);
+  }
+  .rank-badge{
+    position:absolute;
+    top:-14px;
+    left:-14px;
+    width:42px;
+    height:42px;
+    border-radius:50%;
+    background:var(--sky);
+    color:var(--white);
+    font-weight:700;
+    font-family:'Mali', cursive;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:1.1rem;
+    box-shadow:0 6px 14px rgba(79,195,247,0.45);
+    border:3px solid var(--white);
+  }
+  .car-photo{
+    width:100%;
+    aspect-ratio:4/3;
+    border-radius:12px;
+    background:linear-gradient(135deg, #FFE7F1, #E6F7FF);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow:hidden;
+    margin-bottom:12px;
+  }
+  .car-photo img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+  }
+  .car-photo .placeholder-txt{
+    font-size:0.8rem;
+    color:#9AA6C7;
+    text-align:center;
+    padding:0 12px;
+    line-height:1.5;
+  }
+  .car-card h3{
+    font-family:'Mali', cursive;
+    font-size:1.25rem;
+    margin:4px 0 6px;
+    color:var(--grape);
+  }
+  .car-card p{
+    font-size:0.9rem;
+    color:#6B577F;
+    line-height:1.6;
+    margin:0;
+  }
+
+  /* SONGS - cassette style, playable inline */
+  .song-list{
+    display:flex;
+    flex-direction:column;
+    gap:22px;
+  }
+  .song-card{
+    background:var(--white);
+    border-radius:18px;
+    padding:18px;
+    box-shadow:0 10px 24px rgba(61,43,86,0.10);
+    display:grid;
+    grid-template-columns:56px 1fr;
+    gap:16px;
+    align-items:start;
+  }
+  .song-rank{
+    width:56px;
+    height:56px;
+    border-radius:14px;
+    background:var(--sun);
+    color:var(--grape);
+    font-family:'Mali', cursive;
+    font-weight:700;
+    font-size:1.3rem;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    box-shadow:0 6px 14px rgba(255,209,102,0.5);
+  }
+  .song-info h3{
+    font-family:'Mali', cursive;
+    font-size:1.2rem;
+    margin:0 0 10px;
+    color:var(--grape);
+  }
+  .player-frame{
+    width:100%;
+    border-radius:12px;
+    overflow:hidden;
+    box-shadow:0 4px 12px rgba(0,0,0,0.08);
+    background:#000;
+  }
+  .player-frame iframe{
+    width:100%;
+    aspect-ratio:16/9;
+    display:block;
+    border:0;
+  }
+
+  /* footer */
+  footer{
+    text-align:center;
+    margin-top:40px;
+    color:#9A8DB0;
+    font-size:0.9rem;
+  }
+  footer span{
+    display:inline-block;
+    margin-top:6px;
+    font-family:'Mali', cursive;
+    color:var(--pink);
+    font-size:1.1rem;
+  }
+
+  @media (max-width:520px){
+    .name{ font-size:2.1rem; }
+    .section-title h2{ font-size:1.6rem; }
+    .song-card{ grid-template-columns:1fr; }
+    .song-rank{ width:44px; height:44px; font-size:1.1rem; }
+  }
+</style>
+</head>
+<body>
+
+  <div class="doodle d1">🚗</div>
+  <div class="doodle d2">🎧</div>
+  <div class="doodle d3">✨</div>
+  <div class="doodle d4">🎶</div>
+
+  <div class="wrap">
+
+    <!-- ===== PROFILE ===== -->
+    <div class="hero">
+      <div class="avatar-frame">
+        <div class="inner">
+          <!--
+            แทนที่บรรทัดด้านล่างด้วยรูปของคุณ เช่น:
+            <img src="profile.jpg" alt="รูปโปรไฟล์">
+            แล้วลบ <div class="placeholder-txt"> ทิ้งไป
+          -->
+          <div class="placeholder-txt">ใส่รูปโปรไฟล์<br>ที่นี่ (profile.jpg)</div>
+        </div>
+      </div>
+      <h1 class="name">กิตติพัฒน์ ไชยเฟย</h1>
+      <div class="nickname-badge">ชื่อเล่น: พีพี</div>
+      <p class="tagline">ยินดีต้อนรับสู่เว็บไซต์ส่วนตัวของฉัน 🚗🎶 รวมรถในดวงใจและเพลย์ลิสต์โปรด</p>
+    </div>
+
+    <!-- ===== TOP 5 CARS ===== -->
+    <section>
+      <div class="section-title">
+        <span class="line"></span>
+        <h2>🚗 Top 5 รถที่ชอบ</h2>
+        <span class="line"></span>
+      </div>
+
+      <div class="car-grid">
+
+        <div class="car-card">
+          <div class="rank-badge">1</div>
+          <div class="car-photo">
+            <!-- <img src="car1.jpg" alt="ชื่อรถคันที่ 1"> -->
+            <div class="placeholder-txt">ใส่รูปรถ<br>(car1.jpg)</div>
+          </div>
+          <h3>ชื่อรถคันที่ 1</h3>
+          <p>เหตุผลที่ชอบรถคันนี้...</p>
+        </div>
+
+        <div class="car-card">
+          <div class="rank-badge">2</div>
+          <div class="car-photo">
+            <!-- <img src="car2.jpg" alt="ชื่อรถคันที่ 2"> -->
+            <div class="placeholder-txt">ใส่รูปรถ<br>(car2.jpg)</div>
+          </div>
+          <h3>ชื่อรถคันที่ 2</h3>
+          <p>เหตุผลที่ชอบรถคันนี้...</p>
+        </div>
+
+        <div class="car-card">
+          <div class="rank-badge">3</div>
+          <div class="car-photo">
+            <!-- <img src="car3.jpg" alt="ชื่อรถคันที่ 3"> -->
+            <div class="placeholder-txt">ใส่รูปรถ<br>(car3.jpg)</div>
+          </div>
+          <h3>ชื่อรถคันที่ 3</h3>
+          <p>เหตุผลที่ชอบรถคันนี้...</p>
+        </div>
+
+        <div class="car-card">
+          <div class="rank-badge">4</div>
+          <div class="car-photo">
+            <!-- <img src="car4.jpg" alt="ชื่อรถคันที่ 4"> -->
+            <div class="placeholder-txt">ใส่รูปรถ<br>(car4.jpg)</div>
+          </div>
+          <h3>ชื่อรถคันที่ 4</h3>
+          <p>เหตุผลที่ชอบรถคันนี้...</p>
+        </div>
+
+        <div class="car-card">
+          <div class="rank-badge">5</div>
+          <div class="car-photo">
+            <!-- <img src="car5.jpg" alt="ชื่อรถคันที่ 5"> -->
+            <div class="placeholder-txt">ใส่รูปรถ<br>(car5.jpg)</div>
+          </div>
+          <h3>ชื่อรถคันที่ 5</h3>
+          <p>เหตุผลที่ชอบรถคันนี้...</p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ===== TOP 5 SONGS (playable on page) ===== -->
+    <section>
+      <div class="section-title">
+        <span class="line"></span>
+        <h2>🎧 Top 5 เพลงที่ชอบ</h2>
+        <span class="line"></span>
+      </div>
+
+      <div class="song-list">
+
+        <div class="song-card">
+          <div class="song-rank">1</div>
+          <div class="song-info">
+            <h3>ชื่อเพลงที่ 1 - ศิลปิน</h3>
+            <div class="player-frame">
+              <!-- แทนที่ VIDEO_ID ด้วยรหัสวิดีโอ YouTube ของเพลงจริง -->
+              <iframe src="https://www.youtube.com/embed/VIDEO_ID" title="เพลงที่ 1" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+          </div>
+        </div>
+
+        <div class="song-card">
+          <div class="song-rank">2</div>
+          <div class="song-info">
+            <h3>ชื่อเพลงที่ 2 - ศิลปิน</h3>
+            <div class="player-frame">
+              <iframe src="https://www.youtube.com/embed/VIDEO_ID" title="เพลงที่ 2" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+          </div>
+        </div>
+
+        <div class="song-card">
+          <div class="song-rank">3</div>
+          <div class="song-info">
+            <h3>ชื่อเพลงที่ 3 - ศิลปิน</h3>
+            <div class="player-frame">
+              <iframe src="https://www.youtube.com/embed/VIDEO_ID" title="เพลงที่ 3" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+          </div>
+        </div>
+
+        <div class="song-card">
+          <div class="song-rank">4</div>
+          <div class="song-info">
+            <h3>ชื่อเพลงที่ 4 - ศิลปิน</h3>
+            <div class="player-frame">
+              <iframe src="https://www.youtube.com/embed/VIDEO_ID" title="เพลงที่ 4" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+          </div>
+        </div>
+
+        <div class="song-card">
+          <div class="song-rank">5</div>
+          <div class="song-info">
+            <h3>ชื่อเพลงที่ 5 - ศิลปิน</h3>
+            <div class="player-frame">
+              <iframe src="https://www.youtube.com/embed/VIDEO_ID" title="เพลงที่ 5" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <footer>
+      ทำด้วยความตั้งใจ
+      <br>
+      <span>พีพี 🚗🎶</span>
+    </footer>
+
+  </div>
+
+</body>
+</html>
