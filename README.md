@@ -1,1 +1,1 @@
-# midterm-023-KIttiphat
+# midterm-023-kittiphat
